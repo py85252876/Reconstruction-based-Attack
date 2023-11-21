@@ -31,7 +31,7 @@ accelerate config
 
 ## Fine-tune Image Generator Models
 
-After preparing the dataset, we employed the [🤗diffusers](https://github.com/huggingface/diffusers/) code to fine-tune the Stable Diffusion v1-5.
+After preparing the dataset, we employed the [🤗diffusers](https://github.com/huggingface/diffusers/) train_text_to_image_lora.py to fine-tune the Stable Diffusion v1-5.
 
 ```bash
 accelerate launch train_text_to_image_lora.py \
