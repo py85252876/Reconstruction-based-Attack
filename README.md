@@ -11,10 +11,8 @@ In this repository, we can find:
 
 ## Table of Contents
 
-- [Download Dependencies](#download-dependencies)
-	- [DDPM dependencies](#ddpm-dependencies)
-	- [Imagen dependencies](#imagen-dependencies)
-- [Prepare Datasets](#prepare-datasets)
+- [Environment Setup](#Environment Setup)
+- [Fine-tune image generator](#prepare-datasets)
 
 ## Environment Setup
 
@@ -25,3 +23,43 @@ Install [requirements.txt](./requirements.txt) and run:
 ```bash
 pip install -r requirements.txt
 ```
+And initialize an [🤗Accelerate](https://github.com/huggingface/accelerate/) environment with:
+
+```bash
+accelerate config
+```
+
+## Fine-tune Image Generator Models
+
+After preparing the dataset, we employed the [🤗diffusers](https://github.com/huggingface/diffusers/) code to fine-tune the Stable Diffusion v1-5.
+
+```bash
+accelerate launch train_text_to_image_lora.py \
+  --pretrained_model_name_or_path="runwayml/stable-diffusion-v1-5" \
+  --train_data_dir=prepare_dataset \
+  --dataloader_num_workers=8 \
+  --resolution=512 --center_crop --random_flip \
+  --project_name="SD v1-5" \
+  --train_batch_size=4 \
+  --gradient_accumulation_steps=4 \
+  --max_train_steps=62500 \
+  --learning_rate=1e-04 \
+  --max_grad_norm=1 \
+  --lr_scheduler="cosine" --lr_warmup_steps=0 \
+  --output_dir=output_dir \
+  --report_to=wandb \
+  --resume_from_checkpoint="latest" \
+  --checkpointing_steps=12500 \
+  --validation_prompt=valid_prompt \
+  --seed=1337
+```
+
+### Fine-tune Image Captioning Models
+
+## Generate Images from Models
+
+### Generate Images with Captioning Models
+
+## Calculate Reconstruction Distance
+
+## Test Attack Accuracy
