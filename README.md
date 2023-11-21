@@ -11,8 +11,8 @@ In this repository, we can find:
 
 ## Table of Contents
 
-- [Environment Setup](#Environment Setup)
-- [Fine-tune image generator](#prepare-datasets)
+- [Environment Setup](#environment-setup)
+- [Fine-tune image generator](#fine-tune-image-generator-models)
 
 ## Environment Setup
 
