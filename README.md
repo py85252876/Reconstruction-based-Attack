@@ -56,6 +56,12 @@ accelerate launch train_text_to_image_lora.py \
 
 ### Fine-tune Image Captioning Models
 
+In our research, both Attack-II and Attack-IV scenarios operate without using image captions to query the model. Therefore, the captioning model requires fine-tuning on an auxiliary dataset.
+
+```bash
+python3 blip_finetune.py --data_dir auxiliary_dataset_dir
+```
+
 ## Generate Images from Models
 
 ### Generate Images with Captioning Models
