@@ -1,5 +1,7 @@
 # Reconstruction-based Attack
 
+<a href='https://arxiv.org/abs/2312.08207'><img src='https://img.shields.io/badge/Paper-Arxiv-red'></a> 
+
 This work presents an effective black-box membership inference attack framework tailored for the latest generation of image generator models. This novel framework exploits the memorization characteristics of image generator models regarding training data to mount attacks, utilizing reconstruction distance as indicative features.
 
 In this repository, we can find:
