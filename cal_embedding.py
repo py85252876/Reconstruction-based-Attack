@@ -17,6 +17,7 @@ def parse_args():
     parser.add_argument("--save_dir",type=str,default=None)
     parser.add_argument("--method",type=str,default="consine")
     parser.add_argument("--image_encoder",type=str,default="deit")
+    parser.add_argument("--similarity_score_dim",type=int,default=1)
     args = parser.parse_args()
 
     return args
@@ -24,15 +25,15 @@ def parse_args():
 def compute_scores(emb_one, emb_two,method):
     """Computes cosine similarity between two vectors."""
     if method == "consine":
-        scores = torch.nn.functional.cosine_similarity(emb_one, emb_two)
+        scores = torch.nn.functional.cosine_similarity(emb_one, emb_two, dim=args.similarity_score_dim)
     elif method == "euclidean":
-        scores = torch.nn.functional.pairwise_distance(emb_one, emb_two)
+        scores = torch.nn.functional.pairwise_distance(emb_one, emb_two, dim=args.similarity_score_dim)
     elif method == "manhattan":
-        scores = torch.sum(torch.abs(emb_one - emb_two), dim=-1)
+        scores = torch.sum(torch.abs(emb_one - emb_two), dim=args.similarity_score_dim)
     elif method == "hamming":
         emb_one = emb_one.int()
         emb_two = emb_two.int()
-        scores = torch.sum((emb_one ^ emb_two), dim=-1)
+        scores = torch.sum((emb_one ^ emb_two), dim=args.similarity_score_dim)
     return scores.cpu().detach().numpy()
 
 def main():
