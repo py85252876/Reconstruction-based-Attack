@@ -121,10 +121,10 @@ Utilize the reconstruction distance to train an inference model for predicting t
 
 ```bash
 python3 test_accuracy.py \
---target_member_dir=target_member-dir \
---target_non-member_dir=target_non_member-dir \
---shadow_member_dir=shadow_member-dir \
---shadow_non-member_dir=shadow_non_member-dir \
+--target_member_dir=target-member-dir \
+--target_non_member_dir=target-non_member-dir \
+--shadow_member_dir=shadow-member-dir \
+--shadow_non_member_dir=shadow-non_member-dir \
 --method="classifier"
 ```
 
