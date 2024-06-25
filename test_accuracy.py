@@ -14,11 +14,11 @@ from sklearn.preprocessing import StandardScaler
 
 
 def parse_args():
-    parser = argparse.ArgumentParser(description="get image embedding")
+    parser = argparse.ArgumentParser(description="get attack accuracy")
     parser.add_argument("--target_member_dir",type=str,default=None)
-    parser.add_argument("--target_non-member_dir",type=str,default=None)
+    parser.add_argument("--target_non_member_dir",type=str,default=None)
     parser.add_argument("--shadow_member_dir",type=str,default=None)
-    parser.add_argument("--shadow_non-member_dir",type=str,default=None)
+    parser.add_argument("--shadow_non_member_dir",type=str,default=None)
     parser.add_argument("--method",type=str,default="classifier")
     args = parser.parse_args()
 
@@ -26,10 +26,10 @@ def parse_args():
 
 def process_data():
     t_m = torch.load(args.target_member_dir)
-    t_n_m = torch.load(args.target_non-member_dir)
+    t_n_m = torch.load(args.target_non_member_dir)
 
     s_m = torch.load(args.shadow_member_dir)
-    s_n_m = torch.load(args.shadow_non-member_dir)
+    s_n_m = torch.load(args.shadow_non_member_dir)
 
 
     train_datasets = [s_m, s_n_m]
