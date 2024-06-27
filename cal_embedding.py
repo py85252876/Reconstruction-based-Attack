@@ -15,7 +15,7 @@ def parse_args():
     parser.add_argument("--img_num",type=int,default=None)
     parser.add_argument("--gpu",type=int,default=None)
     parser.add_argument("--save_dir",type=str,default=None)
-    parser.add_argument("--method",type=str,default="consine")
+    parser.add_argument("--method",type=str,default="cosine")
     parser.add_argument("--image_encoder",type=str,default="deit")
     parser.add_argument("--similarity_score_dim",type=int,default=1)
     args = parser.parse_args()
@@ -24,7 +24,7 @@ def parse_args():
 
 def compute_scores(emb_one, emb_two,method):
     """Computes cosine similarity between two vectors."""
-    if method == "consine":
+    if method == "cosine":
         scores = torch.nn.functional.cosine_similarity(emb_one, emb_two, dim=args.similarity_score_dim)
     elif method == "euclidean":
         scores = torch.nn.functional.pairwise_distance(emb_one, emb_two, dim=args.similarity_score_dim)
