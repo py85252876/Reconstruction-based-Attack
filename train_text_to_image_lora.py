@@ -44,7 +44,8 @@ from diffusers.loaders import AttnProcsLayers
 from diffusers.models.attention_processor import LoRAAttnProcessor
 from diffusers.optimization import get_scheduler
 from diffusers.utils import check_min_version, is_wandb_available
-
+from opacus import PrivacyEngine
+from opacus.validators import ModuleValidator
 from PIL import Image
 
 # Will error if the minimal version of diffusers is not installed. Remove at your own risks.
@@ -320,7 +321,6 @@ def parse_args():
         default=4,
         help=("The dimension of the LoRA update matrices."),
     )
-
     args = parser.parse_args()
     env_local_rank = int(os.environ.get("LOCAL_RANK", -1))
     if env_local_rank != -1 and env_local_rank != args.local_rank:
@@ -493,6 +493,8 @@ def main():
         optimizer_cls = bnb.optim.AdamW8bit
     else:
         optimizer_cls = torch.optim.AdamW
+    
+    # lora_layers = ModuleValidator.fix(lora_layers)
 
     optimizer = optimizer_cls(
         lora_layers.parameters(),
@@ -592,7 +594,6 @@ def main():
     # The trackers initializes automatically on the main process.
     if accelerator.is_main_process:
         accelerator.init_trackers("text2image-fine-tune", config=vars(args))
-
     # Train!
     total_batch_size = args.train_batch_size * accelerator.num_processes * args.gradient_accumulation_steps
 
@@ -650,7 +651,6 @@ def main():
                 # print(batch["pixel_values"].shape)
                 latents = vae.encode(batch["pixel_values"].to(dtype=weight_dtype)).latent_dist.sample()
                 latents = latents * vae.config.scaling_factor
-
                 # Sample noise that we'll add to the latents
                 noise = torch.randn_like(latents)
                 if args.noise_offset:
@@ -707,6 +707,7 @@ def main():
                 train_loss += avg_loss.item() / args.gradient_accumulation_steps
 
                 # Backpropagate
+                loss.requires_grad = True
                 accelerator.backward(loss)
                 if accelerator.sync_gradients:
                     params_to_clip = lora_layers.parameters()
@@ -714,6 +715,7 @@ def main():
                 optimizer.step()
                 lr_scheduler.step()
                 optimizer.zero_grad()
+                
 
             # Checks if the accelerator has performed an optimization step behind the scenes
             if accelerator.sync_gradients:
@@ -753,8 +755,10 @@ def main():
 
             if global_step >= args.max_train_steps:
                 break
-
+        
         if accelerator.is_main_process:
+            # epsilon = privacy_engine.accountant.get_epsilon(delta=1e-2)
+            # logger.info(f"The private budget is {epsilon}")
             if args.validation_prompt is not None and epoch % args.validation_epochs == 0:
                 logger.info(
                     f"Running validation... \n Generating {args.num_validation_images} images with prompt:"
@@ -796,7 +800,6 @@ def main():
 
                 del pipeline
                 torch.cuda.empty_cache()
-
     # Save the lora layers
     accelerator.wait_for_everyone()
     if accelerator.is_main_process:

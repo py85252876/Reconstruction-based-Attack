@@ -59,7 +59,7 @@ def main():
     train_dataloader = DataLoader(train_dataset, shuffle=True, batch_size=96, collate_fn=collate_fn)
     optimizer = torch.optim.Adam(model.parameters(), lr=5e-6)
     device = "cuda:7" if torch.cuda.is_available() else "cpu"
-    access_token="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"
+    access_token=args.tokenid
     model.train()
     model.to(device)
     progress_bar = tqdm(range(100, 500))
