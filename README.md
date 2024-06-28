@@ -25,10 +25,10 @@ In this repository, we can find:
 
 > Before running the code, make sure to install all dependency files.
 
-Install [requirements.txt](./requirements.txt) and run:
+Install [environment.yml](./environment.yml) and run:
 
 ```bash
-pip install -r requirements.txt
+conda env create -f environment.yml
 ```
 And initialize an [🤗Accelerate](https://github.com/huggingface/accelerate/) environment with:
 
