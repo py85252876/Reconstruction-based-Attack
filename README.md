@@ -19,7 +19,6 @@ In this repository, we can find:
     - [Generate Images with Captioning Models](#generate-images-with-captioning-models)
 - [Calculate Reconstruction Distance](#calculate-reconstruction-distance)
 - [Test Attack Accuracy](#test-attack-accuracy)
-- [Citation](#citation)
 
 ## Environment Setup
 
